@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  api-node-dev:
+    image: api-node
+    container_name: api-node-dev
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    volumes:
+      - type: bind
+        source: ./src
+        target: /usr/src/app/src
+    ports:
+      - 8090:8090
+    init: true
+    env_file:
+      - .env
+    restart: unless-stopped
