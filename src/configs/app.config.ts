@@ -1,4 +1,4 @@
-import { Environment } from "@/models/app";
+import { environment } from "@/schemas/app";
 
-export const currentEnvironment = Environment.parse(process.env.NODE_ENV);
+export const currentEnvironment = environment.parse(process.env.NODE_ENV);
 export const isDevEnviroment: boolean = currentEnvironment === "development";

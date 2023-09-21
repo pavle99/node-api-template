@@ -1,10 +1,52 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-type GetV1UserIdInput = {} & {
-    /** a numeric string containing the id of the user */
-    id: string;
+type PostV1LoginInput = {
+    username: string;
+    password: string;
 };
 
-type GetV1UserIdResponse = {
+type PostV1LoginResponse = {
+    status: "success";
+    data: {
+        id: string;
+        username: string;
+        email: string;
+        roles: string[];
+        accessToken: string;
+    };
+} | {
+    status: "error";
+    error: {
+        message: string;
+    };
+};
+
+type PostV1RegisterInput = ({
+    username: string;
+    email: string;
+} & {
+    roles: string[];
+}) & {
+    username: string;
+    email: string;
+    password: string;
+    roles?: string[] | undefined;
+};
+
+type PostV1RegisterResponse = {
+    status: "success";
+    data: {
+        message: string;
+    };
+} | {
+    status: "error";
+    error: {
+        message: string;
+    };
+};
+
+type GetV1UsersInput = {} & {};
+
+type GetV1UsersResponse = {
     status: "success";
     data: {
         demoData: string;
@@ -16,15 +58,58 @@ type GetV1UserIdResponse = {
     };
 };
 
-type PostV1UserIdInput = ({
-    key: string;
-} & {}) & {
+type GetV1UsersModInput = ({} & {}) & {};
+
+type GetV1UsersModResponse = {
+    status: "success";
+    data: {
+        demoData: string;
+    };
+} | {
+    status: "error";
+    error: {
+        message: string;
+    };
+};
+
+type GetV1UsersAdminInput = ({} & {}) & {};
+
+type GetV1UsersAdminResponse = {
+    status: "success";
+    data: {
+        demoData: string;
+    };
+} | {
+    status: "error";
+    error: {
+        message: string;
+    };
+};
+
+type GetV1UsersIdInput = {} & {
+    /** a numeric string containing the id of the user */
+    id: string;
+};
+
+type GetV1UsersIdResponse = {
+    status: "success";
+    data: {
+        demoData: string;
+    };
+} | {
+    status: "error";
+    error: {
+        message: string;
+    };
+};
+
+type PostV1UsersIdInput = {} & {
     /** a numeric string containing the id of the user */
     id: string;
     name: string;
 };
 
-type PostV1UserIdResponse = {
+type PostV1UsersIdResponse = {
     status: "success";
     data: {
         name: string;
@@ -37,23 +122,33 @@ type PostV1UserIdResponse = {
     };
 };
 
-export type Path = "/v1/user/:id" | "/v1/user/:id";
+export type Path = "/v1/login" | "/v1/register" | "/v1/users" | "/v1/users/mod" | "/v1/users/admin" | "/v1/users/:id" | "/v1/users/:id";
 
 export type Method = "get" | "post" | "put" | "delete" | "patch";
 
 export type MethodPath = `${Method} ${Path}`;
 
 export interface Input extends Record<MethodPath, any> {
-    "get /v1/user/:id": GetV1UserIdInput;
-    "post /v1/user/:id": PostV1UserIdInput;
+    "post /v1/login": PostV1LoginInput;
+    "post /v1/register": PostV1RegisterInput;
+    "get /v1/users": GetV1UsersInput;
+    "get /v1/users/mod": GetV1UsersModInput;
+    "get /v1/users/admin": GetV1UsersAdminInput;
+    "get /v1/users/:id": GetV1UsersIdInput;
+    "post /v1/users/:id": PostV1UsersIdInput;
 }
 
 export interface Response extends Record<MethodPath, any> {
-    "get /v1/user/:id": GetV1UserIdResponse;
-    "post /v1/user/:id": PostV1UserIdResponse;
+    "post /v1/login": PostV1LoginResponse;
+    "post /v1/register": PostV1RegisterResponse;
+    "get /v1/users": GetV1UsersResponse;
+    "get /v1/users/mod": GetV1UsersModResponse;
+    "get /v1/users/admin": GetV1UsersAdminResponse;
+    "get /v1/users/:id": GetV1UsersIdResponse;
+    "post /v1/users/:id": PostV1UsersIdResponse;
 }
 
-export const jsonEndpoints = { "get /v1/user/:id": true, "post /v1/user/:id": true };
+export const jsonEndpoints = { "post /v1/login": true, "post /v1/register": true, "get /v1/users": true, "get /v1/users/mod": true, "get /v1/users/admin": true, "get /v1/users/:id": true, "post /v1/users/:id": true };
 
 export type Provider = <M extends Method, P extends Path>(method: M, path: P, params: Input[`${M} ${P}`]) => Promise<Response[`${M} ${P}`]>;
 

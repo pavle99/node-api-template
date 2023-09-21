@@ -3,12 +3,436 @@ info:
   title: node-backend-template
   version: 0.0.1
 paths:
-  "/v1/user/{id}":
-    get:
-      operationId: GetV1UserId
+  /v1/login:
+    post:
+      operationId: PostV1Login
       responses:
         "200":
-          description: GET /v1/user/:id Successful response
+          description: POST /v1/login Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - success
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      username:
+                        type: string
+                      email:
+                        type: string
+                      roles:
+                        type: array
+                        items:
+                          type: string
+                      accessToken:
+                        type: string
+                    required:
+                      - id
+                      - username
+                      - email
+                      - roles
+                      - accessToken
+                    example:
+                      id: 60a0d0f9e0d6a53d3c9d6a2c
+                      username: username
+                      email: example@gmail.com
+                      roles:
+                        - user
+                      accessToken: jwt-token-example
+                required:
+                  - status
+                  - data
+              examples:
+                example1:
+                  value:
+                    status: success
+                    data:
+                      id: 60a0d0f9e0d6a53d3c9d6a2c
+                      username: username
+                      email: example@gmail.com
+                      roles:
+                        - user
+                      accessToken: jwt-token-example
+        "400":
+          description: POST /v1/login Error response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - error
+                  error:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                    required:
+                      - message
+                required:
+                  - status
+                  - error
+              examples:
+                example1:
+                  value:
+                    status: error
+                    error:
+                      message: Sample error message
+      tags:
+        - auth
+      requestBody:
+        description: POST /v1/login request body
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              required:
+                - username
+                - password
+            examples:
+              example1:
+                value:
+                  username: username
+                  password: password
+  /v1/register:
+    post:
+      operationId: PostV1Register
+      responses:
+        "200":
+          description: POST /v1/register Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - success
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                    required:
+                      - message
+                    example:
+                      message: User was registered successfully!
+                required:
+                  - status
+                  - data
+              examples:
+                example1:
+                  value:
+                    status: success
+                    data:
+                      message: User was registered successfully!
+        "400":
+          description: POST /v1/register Error response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - error
+                  error:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                    required:
+                      - message
+                required:
+                  - status
+                  - error
+              examples:
+                example1:
+                  value:
+                    status: error
+                    error:
+                      message: Sample error message
+      tags:
+        - auth
+      requestBody:
+        description: POST /v1/register request body
+        content:
+          application/json:
+            schema:
+              allOf:
+                - allOf:
+                    - type: object
+                      properties:
+                        username:
+                          type: string
+                          minLength: 1
+                        email:
+                          type: string
+                          format: email
+                      required:
+                        - username
+                        - email
+                      example:
+                        username: username
+                        email: example@gmail.com
+                    - type: object
+                      properties:
+                        roles:
+                          type: array
+                          items:
+                            type: string
+                      required:
+                        - roles
+                      example:
+                        roles:
+                          - user
+                          - moderator
+                          - admin
+                - type: object
+                  properties:
+                    username:
+                      type: string
+                    email:
+                      type: string
+                      format: email
+                    password:
+                      type: string
+                    roles:
+                      type: array
+                      items:
+                        type: string
+                  required:
+                    - username
+                    - email
+                    - password
+                  example:
+                    username: username
+                    email: example@gmail.com
+                    password: password
+                    roles:
+                      - user
+            examples:
+              example1:
+                value:
+                  username: username
+                  email: example@gmail.com
+                  roles:
+                    - user
+                  password: password
+  /v1/users:
+    get:
+      operationId: GetV1Users
+      responses:
+        "200":
+          description: GET /v1/users Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - success
+                  data:
+                    type: object
+                    properties:
+                      demoData:
+                        type: string
+                    required:
+                      - demoData
+                    example:
+                      demoData: Querying all users succeed!
+                required:
+                  - status
+                  - data
+              examples:
+                example1:
+                  value:
+                    status: success
+                    data:
+                      demoData: Querying all users succeed!
+        "400":
+          description: GET /v1/users Error response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - error
+                  error:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                    required:
+                      - message
+                required:
+                  - status
+                  - error
+              examples:
+                example1:
+                  value:
+                    status: error
+                    error:
+                      message: Sample error message
+      tags:
+        - users
+      security:
+        - APIKEY_1: []
+  /v1/users/mod:
+    get:
+      operationId: GetV1UsersMod
+      responses:
+        "200":
+          description: GET /v1/users/mod Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - success
+                  data:
+                    type: object
+                    properties:
+                      demoData:
+                        type: string
+                    required:
+                      - demoData
+                    example:
+                      demoData: Querying all users succeed!
+                required:
+                  - status
+                  - data
+              examples:
+                example1:
+                  value:
+                    status: success
+                    data:
+                      demoData: Querying all users succeed!
+        "400":
+          description: GET /v1/users/mod Error response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - error
+                  error:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                    required:
+                      - message
+                required:
+                  - status
+                  - error
+              examples:
+                example1:
+                  value:
+                    status: error
+                    error:
+                      message: Sample error message
+      tags:
+        - users
+      security:
+        - APIKEY_1: []
+  /v1/users/admin:
+    get:
+      operationId: GetV1UsersAdmin
+      responses:
+        "200":
+          description: GET /v1/users/admin Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - success
+                  data:
+                    type: object
+                    properties:
+                      demoData:
+                        type: string
+                    required:
+                      - demoData
+                    example:
+                      demoData: Querying all users succeed!
+                required:
+                  - status
+                  - data
+              examples:
+                example1:
+                  value:
+                    status: success
+                    data:
+                      demoData: Querying all users succeed!
+        "400":
+          description: GET /v1/users/admin Error response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - error
+                  error:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                    required:
+                      - message
+                required:
+                  - status
+                  - error
+              examples:
+                example1:
+                  value:
+                    status: error
+                    error:
+                      message: Sample error message
+      tags:
+        - users
+      security:
+        - APIKEY_1: []
+  "/v1/users/{id}":
+    get:
+      operationId: GetV1UsersId
+      responses:
+        "200":
+          description: GET /v1/users/:id Successful response
           content:
             application/json:
               schema:
@@ -37,7 +461,7 @@ paths:
                     data:
                       demoData: Querying User 12 succeed!
         "400":
-          description: GET /v1/user/:id Error response
+          description: GET /v1/users/:id Error response
           content:
             application/json:
               schema:
@@ -71,7 +495,7 @@ paths:
         - name: id
           in: path
           required: true
-          description: GET /v1/user/:id parameter
+          description: GET /v1/users/:id parameter
           schema:
             type: string
             pattern: /\d+/
@@ -80,10 +504,10 @@ paths:
             example1:
               value: "12"
     post:
-      operationId: PostV1UserId
+      operationId: PostV1UsersId
       responses:
         "200":
-          description: POST /v1/user/:id Successful response
+          description: POST /v1/users/:id Successful response
           content:
             application/json:
               schema:
@@ -121,7 +545,7 @@ paths:
                       name: John Doe
                       createdAt: 2021-12-31T00:00:00.000Z
         "400":
-          description: POST /v1/user/:id Error response
+          description: POST /v1/users/:id Error response
           content:
             application/json:
               schema:
@@ -155,7 +579,7 @@ paths:
         - name: id
           in: path
           required: true
-          description: POST /v1/user/:id parameter
+          description: POST /v1/users/:id parameter
           schema:
             type: string
             pattern: /\d+/
@@ -164,23 +588,13 @@ paths:
             example1:
               value: "12"
       requestBody:
-        description: POST /v1/user/:id request body
+        description: POST /v1/users/:id request body
         content:
           application/json:
             schema:
               allOf:
-                - allOf:
-                    - type: object
-                      properties:
-                        key:
-                          type: string
-                          minLength: 1
-                      required:
-                        - key
-                      example:
-                        key: "1234"
-                    - type: object
-                      properties: {}
+                - type: object
+                  properties: {}
                 - type: object
                   properties:
                     name:
@@ -193,11 +607,7 @@ paths:
             examples:
               example1:
                 value:
-                  key: "1234"
                   name: John Doe
-      security:
-        - APIKEY_1: []
-          APIKEY_2: []
 components:
   schemas: {}
   responses: {}
@@ -208,16 +618,14 @@ components:
   securitySchemes:
     APIKEY_1:
       type: apiKey
-      in: query
-      name: key
-    APIKEY_2:
-      type: apiKey
       in: header
-      name: token
+      name: Authorization
   links: {}
   callbacks: {}
 tags:
   - name: users
     description: Everything about the users
+  - name: auth
+    description: Everything about authentication
 servers:
   - url: http://api.example.com/v1

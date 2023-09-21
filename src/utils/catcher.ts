@@ -1,7 +1,12 @@
-interface SafeReturn<T> {
-  ok: boolean;
-  data: T | string;
-}
+type SafeReturn<T> =
+  | {
+      ok: true;
+      data: T;
+    }
+  | {
+      ok: false;
+      data: string;
+    };
 
 /**
  * Executes a function and returns an object with a ok flag and either the result of the function or an error message.

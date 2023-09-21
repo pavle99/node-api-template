@@ -1,5 +1,5 @@
-import { EnvFileSchema } from "@/models";
+import { envFileSchema } from "@/schemas/app";
 import * as dotenv from "dotenv";
 dotenv.config();
 
-export const envConfig = EnvFileSchema.parse(process.env);
+export const envConfig = envFileSchema.parse(process.env);

@@ -16,5 +16,6 @@ export const zodConfig = createConfig({
   },
   tags: {
     users: "Everything about the users",
+    auth: "Everything about authentication",
   },
 });
