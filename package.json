@@ -16,7 +16,8 @@
     "lint": "eslint  --cache \"src/**/*.{js,ts}\"",
     "lint:fix": "eslint  --cache --fix \"src/**/*.{js,ts}\"",
     "generate:client": "NODE_ENV=development tsx ./src/scripts/client-generator.ts",
-    "generate:docs": "NODE_ENV=development tsx ./src/scripts/docs-generator.ts"
+    "generate:docs": "NODE_ENV=development tsx ./src/scripts/docs-generator.ts",
+    "prepare": "husky install"
   },
   "_moduleAliases": {
     "@": "dist"
