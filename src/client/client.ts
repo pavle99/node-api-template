@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 type PostV1LoginInput = {
     username: string;
     password: string;
@@ -150,6 +149,8 @@ export interface Response extends Record<MethodPath, any> {
 }
 
 export const jsonEndpoints = { "post /v1/login": true, "post /v1/register": true, "get /v1/users": true, "get /v1/users/mod": true, "get /v1/users/admin": true, "get /v1/users/:id": true, "post /v1/users/:id": true };
+
+export const endpointTags = { "post /v1/login": ["auth"], "post /v1/register": ["auth"], "get /v1/users": ["users"], "get /v1/users/mod": ["users"], "get /v1/users/admin": ["users"], "get /v1/users/:id": ["users"], "post /v1/users/:id": ["users"] };
 
 export type Provider = <M extends Method, P extends Path>(method: M, path: P, params: Input[`${M} ${P}`]) => Promise<Response[`${M} ${P}`]>;
 

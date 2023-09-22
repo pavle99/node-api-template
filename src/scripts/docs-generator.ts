@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import fs from "fs";
-import { OpenAPI } from "express-zod-api";
+import { Documentation } from "express-zod-api";
 
 import { envConfig } from "@/configs/env.config";
 import { zodConfig as config } from "@/configs/zod.config";
@@ -10,7 +10,7 @@ console.log("✍️  Generating docs...");
 // Check this for docs: https://github.com/RobinTail/express-zod-api/tree/master#creating-a-documentation
 fs.writeFileSync(
   "./src/docs/api.yaml",
-  new OpenAPI({
+  new Documentation({
     routing, // the same routing and config that you use to start the server
     config,
     version: envConfig.API_VERSION,

@@ -23,6 +23,8 @@ const initialize = async () => {
   const roles = await Role.find().estimatedDocumentCount();
   if (roles !== 0) return;
 
+  console.log("No roles found, creating new ones...");
+
   const newRoles = await Role.insertMany([
     { name: "user" },
     { name: "moderator" },
