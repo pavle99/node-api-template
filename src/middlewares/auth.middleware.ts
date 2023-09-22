@@ -31,7 +31,7 @@ export const checkDuplicateUsernameOrEmailMiddleware = createMiddleware({
       throw createHttpError(400, "This email is already in use!");
     }
 
-    return { email, username };
+    return {};
   },
 });
 
@@ -64,7 +64,7 @@ export const verifyTokenMiddleware = createMiddleware({
   security: {
     and: [{ type: "header", name: "Authorization" }],
   },
-  input: withMeta(z.object({})).example({}),
+  input: z.object({}),
   middleware: async ({ request, logger }) => {
     logger.debug("Verifying token...");
 
@@ -85,15 +85,15 @@ export const verifyTokenMiddleware = createMiddleware({
       throw createHttpError(500, "Decoding token failed!");
     }
 
-    const userId = decoded.id as string;
+    request.userId = decoded.id;
 
-    return { userId };
+    return {};
   },
 });
 
 export const isModeratorMiddleware = createMiddleware({
-  input: z.object({ userId: z.string() }),
-  middleware: async ({ logger, input: { userId } }) => {
+  input: z.object({}),
+  middleware: async ({ logger, request: { userId } }) => {
     logger.debug("Checking whether user is moderator...");
 
     const user = await User.findById({ _id: userId });
@@ -109,8 +109,8 @@ export const isModeratorMiddleware = createMiddleware({
 });
 
 export const isAdminMiddleware = createMiddleware({
-  input: z.object({ userId: z.string() }),
-  middleware: async ({ logger, input: { userId } }) => {
+  input: z.object({}),
+  middleware: async ({ logger, request: { userId } }) => {
     logger.debug("Checking whether user is admin...");
 
     const user = await User.findById({ _id: userId });

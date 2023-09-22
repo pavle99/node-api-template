@@ -3,7 +3,8 @@ import mongoose, { HydratedDocumentFromSchema, InferSchemaType } from "mongoose"
 const RoleSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
+    enum: ["user", "moderator", "admin"],
+    default: "user",
     unique: true,
   },
 });
