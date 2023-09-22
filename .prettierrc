@@ -1,8 +1,32 @@
 {
-    "semi": true,
-    "trailingComma": "all",
-    "singleQuote": false,
-    "printWidth": 100,
-    "tabWidth": 2,
-    "endOfLine": "auto"
+  "semi": true,
+  "trailingComma": "all",
+  "singleQuote": false,
+  "printWidth": 100,
+  "tabWidth": 2,
+  "endOfLine": "auto",
+
+  "plugins": ["@ianvs/prettier-plugin-sort-imports"],
+
+  "importOrder": [
+    "<THIRD_PARTY_MODULES>",
+    "",
+    "^types$",
+    "^@/client(/(.*))?$",
+    "^@/configs(/(.*))?$",
+    "^@/controllers(/(.*))?$",
+    "^@/docs(/(.*))?$",
+    "^@/factories(/(.*))?$",
+    "^@/middlewares(/(.*))?$",
+    "^@/models(/(.*))?$",
+    "^@/routes(/(.*))?$",
+    "^@/schemas(/(.*))?$",
+    "^@/scripts(/(.*))?$",
+    "^@/services(/(.*))?$",
+    "^@/types(/(.*))?$",
+    "^@/utils(/(.*))?$",
+    "",
+    "^[./]"
+  ],
+  "importOrderParserPlugins": ["typescript", "jsx", "decorators-legacy"]
 }

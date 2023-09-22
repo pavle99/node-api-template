@@ -1,10 +1,11 @@
+import { createHttpError, createMiddleware, withMeta } from "express-zod-api";
+import jwt from "jsonwebtoken";
+import { z } from "zod";
+
 import { envConfig } from "@/configs/env.config";
 import { Role } from "@/models/role.model";
 import { User } from "@/models/user.model";
 import { safe } from "@/utils/catcher";
-import { createHttpError, createMiddleware, withMeta } from "express-zod-api";
-import jwt from "jsonwebtoken";
-import { z } from "zod";
 
 export const checkDuplicateUsernameOrEmailMiddleware = createMiddleware({
   input: withMeta(

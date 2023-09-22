@@ -1,8 +1,9 @@
 /* eslint-disable no-console */
 
 import mongoose from "mongoose";
-import { Role } from "@/models/role.model";
+
 import { envConfig } from "@/configs/env.config";
+import { Role } from "@/models/role.model";
 
 export const connectToDB = async () => {
   mongoose

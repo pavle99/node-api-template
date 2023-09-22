@@ -1,6 +1,7 @@
+import bcrypt from "bcrypt";
+
 import { Role } from "@/models/role.model";
 import { User } from "@/models/user.model";
-import bcrypt from "bcrypt";
 
 interface IRegisterUser {
   username: string;

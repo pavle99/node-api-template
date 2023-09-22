@@ -1,4 +1,5 @@
 import { createConfig } from "express-zod-api";
+
 import { envConfig } from "./env.config";
 
 // Possible settings: https://github.com/RobinTail/express-zod-api/blob/master/src/config-type.ts

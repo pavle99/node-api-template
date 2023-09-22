@@ -1,9 +1,10 @@
+import { createServer } from "express-zod-api";
+
 import { isDevEnviroment } from "@/configs/app.config";
 import { connectToDB } from "@/configs/db.config";
 import { envConfig } from "@/configs/env.config";
 import { zodConfig } from "@/configs/zod.config";
 import { routing } from "@/routes";
-import { createServer } from "express-zod-api";
 
 if (isDevEnviroment && envConfig.GENERATE_CLIENT) {
   import("@/scripts/client-generator");

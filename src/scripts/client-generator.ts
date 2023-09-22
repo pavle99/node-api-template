@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import fs from "fs";
 import { Client } from "express-zod-api";
+
 import { routing } from "@/routes";
 
 console.log("✍️  Generating client...");

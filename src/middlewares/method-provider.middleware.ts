@@ -1,4 +1,4 @@
-import { Method, createMiddleware } from "express-zod-api";
+import { createMiddleware, Method } from "express-zod-api";
 import { z } from "zod";
 
 export const methodProviderMiddleware = createMiddleware({

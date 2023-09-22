@@ -1,3 +1,5 @@
+import { createHttpError } from "express-zod-api";
+
 import { authenticatedEndpointsFactory } from "@/factories/authenticated-endpoints.factory";
 import { taggedEndpointsFactory } from "@/factories/tagged-endpoints.factory";
 import { isAdminMiddleware, isModeratorMiddleware } from "@/middlewares/auth.middleware";
@@ -12,7 +14,6 @@ import {
 } from "@/schemas/users";
 import { exampleWithRandomThrow } from "@/services/example.service";
 import { safeAsync } from "@/utils/catcher";
-import { createHttpError } from "express-zod-api";
 
 export const getUsersController = authenticatedEndpointsFactory.build({
   method: "get",

@@ -1,3 +1,5 @@
+import { DependsOnMethod, Routing } from "express-zod-api";
+
 import { loginEndpoint, registerEndpoint } from "@/controllers/auth.controllers";
 import {
   getUserEndpoint,
@@ -6,7 +8,6 @@ import {
   getUsersModController,
   updateUserEndpoint,
 } from "@/controllers/users.controllers";
-import { DependsOnMethod, Routing } from "express-zod-api";
 
 export const routing: Routing = {
   v1: {

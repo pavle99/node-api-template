@@ -1,9 +1,10 @@
 /* eslint-disable no-console */
 import fs from "fs";
 import { OpenAPI } from "express-zod-api";
-import { routing } from "@/routes";
-import { zodConfig as config } from "@/configs/zod.config";
+
 import { envConfig } from "@/configs/env.config";
+import { zodConfig as config } from "@/configs/zod.config";
+import { routing } from "@/routes";
 
 console.log("✍️  Generating docs...");
 // Check this for docs: https://github.com/RobinTail/express-zod-api/tree/master#creating-a-documentation

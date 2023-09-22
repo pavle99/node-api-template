@@ -1,3 +1,7 @@
+import bcrypt from "bcrypt";
+import { createHttpError } from "express-zod-api";
+import jwt from "jsonwebtoken";
+
 import { envConfig } from "@/configs/env.config";
 import { taggedEndpointsFactory } from "@/factories/tagged-endpoints.factory";
 import {
@@ -14,9 +18,6 @@ import {
 } from "@/schemas/auth";
 import { registerUser } from "@/services/auth.service";
 import { safeAsync } from "@/utils/catcher";
-import bcrypt from "bcrypt";
-import { createHttpError } from "express-zod-api";
-import jwt from "jsonwebtoken";
 
 export const registerEndpoint = taggedEndpointsFactory
   .addMiddleware(checkDuplicateUsernameOrEmailMiddleware)
