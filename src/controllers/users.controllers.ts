@@ -1,9 +1,6 @@
+import { authenticatedEndpointsFactory } from "@/factories/authenticated-endpoints.factory";
 import { taggedEndpointsFactory } from "@/factories/tagged-endpoints.factory";
-import {
-  isAdminMiddleware,
-  isModeratorMiddleware,
-  verifyTokenMiddleware,
-} from "@/middlewares/auth.middleware";
+import { isAdminMiddleware, isModeratorMiddleware } from "@/middlewares/auth.middleware";
 import { methodProviderMiddleware } from "@/middlewares/method-provider.middleware";
 import {
   getUserInputSchema,
@@ -17,22 +14,19 @@ import { exampleWithRandomThrow } from "@/services/example.service";
 import { safeAsync } from "@/utils/catcher";
 import { createHttpError } from "express-zod-api";
 
-export const getUsersController = taggedEndpointsFactory
-  .addMiddleware(verifyTokenMiddleware)
-  .build({
-    method: "get",
-    tag: "users",
-    input: getUsersInputSchema,
-    output: getUsersOutputSchema,
-    handler: async ({ logger }) => {
-      logger.debug("Querying all users...");
+export const getUsersController = authenticatedEndpointsFactory.build({
+  method: "get",
+  tag: "users",
+  input: getUsersInputSchema,
+  output: getUsersOutputSchema,
+  handler: async ({ logger }) => {
+    logger.debug("Querying all users...");
 
-      return { demoData: "Querying all users succeed!" };
-    },
-  });
+    return { demoData: "Querying all users succeed!" };
+  },
+});
 
-export const getUsersModController = taggedEndpointsFactory
-  .addMiddleware(verifyTokenMiddleware)
+export const getUsersModController = authenticatedEndpointsFactory
   .addMiddleware(isModeratorMiddleware)
   .build({
     method: "get",
@@ -46,8 +40,7 @@ export const getUsersModController = taggedEndpointsFactory
     },
   });
 
-export const getUsersAdminController = taggedEndpointsFactory
-  .addMiddleware(verifyTokenMiddleware)
+export const getUsersAdminController = authenticatedEndpointsFactory
   .addMiddleware(isAdminMiddleware)
   .build({
     method: "get",
@@ -70,12 +63,11 @@ export const getUserEndpoint = taggedEndpointsFactory
     description: "Example user retrieval endpoint.",
     input: getUserInputSchema,
     output: getUserOutputSchema,
-    handler: async ({ input: { id }, options: { method }, logger }) => {
-      logger.debug(`Requested id: ${id}, method ${method}`);
+    handler: async ({ input: { id, queryParam }, options: { method }, logger }) => {
+      logger.debug(`Requested id: ${id}, method ${method}, queryParam: ${queryParam}`);
 
       if (id > 100) throw createHttpError(404, "User not found");
 
-      // Example calling async function but with the safety it never crashes!
       const exampleFnResult = await safeAsync(async () => await exampleWithRandomThrow());
 
       if (!exampleFnResult.ok) {

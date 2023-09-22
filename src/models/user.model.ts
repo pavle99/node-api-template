@@ -1,12 +1,4 @@
-import { IRole } from "@/models/role.model";
-import mongoose, { Document } from "mongoose";
-
-export interface IUser extends Document {
-  username: string;
-  email: string;
-  password: string;
-  roles: IRole[];
-}
+import mongoose, { HydratedDocumentFromSchema, InferSchemaType } from "mongoose";
 
 const UserSchema = new mongoose.Schema({
   username: {
@@ -31,4 +23,8 @@ const UserSchema = new mongoose.Schema({
   ],
 });
 
-export const User = mongoose.model<IUser>("User", UserSchema);
+export const User = mongoose.model("User", UserSchema);
+
+export type THydratedUser = HydratedDocumentFromSchema<typeof UserSchema>;
+
+export type TUser = InferSchemaType<typeof UserSchema>;

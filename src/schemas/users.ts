@@ -18,9 +18,11 @@ export const getUserInputSchema = withMeta(
       .regex(/\d+/)
       .transform((id) => parseInt(id, 10))
       .describe("a numeric string containing the id of the user"),
+    queryParam: z.array(z.string()).optional(),
   }),
 ).example({
   id: "12",
+  queryParam: ["foo", "bar"],
 });
 export const getUserOutputSchema = withMeta(
   z.object({

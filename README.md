@@ -1,13 +1,13 @@
 ## Features
 
- - **🤏 Minimal**: You have the bare minimum to start your API project. You can install any ORM you want, you can use any file structure you want...
  - **🦺 Typesafe**: I am using Typescript. Zod is also installed and everything is using it (including Express!).
+ - **🔒 Authed**: Logic for registering and logging in users is already implemented as well as guarding routes with JWT middleware.
  - **📝 Linted**: ESLint is configured with Prettier, rules are created and everything is working, even autoformatting. Now you don't have to enter in the settings nightmare anymore.
  - **📦 Production-ready Dockerization**: A Dockerfile is already created and optimized for production. It includes several stages so you can run it also for a development instance.
  - **📚 Auto docs generation**: Yeah, you heard it right. The boilerplate will generate OpenAPI 3 docs from your routes automatically!
  - **👤 Auto client generation**: Even better! Now you will have automatically generated a fully type safe file that you can drop into your front-end code and do API calls to the API without worrying about coding it!
  - **📄 Aliases support**: No more imports like "../../../../file"! Aliases are fully supported, both in dev and prod runtimes!
- - **🔥 Hot-reload**: In development, you will have hot-reload when you do file changes, as you deserve.
+ - **🔥 Hot-reload**: In development, you will have hot-reload when you do file changes. No more restarting the server manually!
  - **➰ Multi-instance, auto-restart and dockerized**: In the Dockerized production build, you won't have to worry about instances, restarts... everything is already configured with PM2.
 
 ## Requeriments
@@ -16,7 +16,11 @@
 
 ## How to start?
 
-First, install the dependencies. I recommend you to use npm if you plan to use the Dockerfile since the Dockerfile will use the `package-lock.json` from npm.
+First, create an instance of a Mongo database. You can use a local instance or a remote one, it is up to you. If you want to use a local instance, you can use the Docker Compose file included in the project. Just run:
+
+    docker-compose up -d --build
+
+Next, install the dependencies. I recommend you to use npm if you plan to use the Dockerfile since the Dockerfile will use the `package-lock.json` from npm.
 
 But, as always, feel free to use any package manager!
 
@@ -32,9 +36,9 @@ Once you have the .env file ready, it is time to rename the project.
 ## How to rename the project?
 I have tried to reduce the changes you have to do by a lot but still you have to change some files.
 First, in the `package.json` file, change the name of the project in the **line 2**.
-In the **same file**, in the **lines 25, 26, 27 and 28**; change the project name from **naucode/express-typescript-boilerplate-api** to your project name.
+In the **same file**, in the **lines 25, 26, 27 and 28**; change the project name from **node-api-template** to your project name.
 In the `.env` file, make sure to change the **API_TITLE** to your project name.
-Finally, in the **line 13** in the file `./src/models/app.ts`, change the text from '**express-typescript-boilerplate-api**' to your project name.
+Finally, in the **line 13** in the file `./src/models/app.ts`, change the text from '**node-api-template**' to your project name.
 To finish, **reinstall the dependencies** (for example with `npm i`) and you will have finished!
 
 ## Available .env Settings
@@ -51,6 +55,9 @@ To finish, **reinstall the dependencies** (for example with `npm i`) and you wil
 |API_VERSION|[String] The API version. It is just used in the generated docs. By default it is '**0.0.1**'.|
 |API_TITLE|[String] The API title. It is used only in the generated docs. By default it is your **project name**.|
 |API_SERVER_URL|[String] The API URL. It is used only in the generated docs but you don't need a working URL, only if you want to use those docs to call the API directly. By default it is '**http://api.example.com/v1**'|
+|MONGO_URI|[String] The URI of the Mongo database. By default it is '**mongodb://localhost:27017/**'|
+|MONGO_DB_NAME|[String] The name of the Mongo database. By default it is '**node-api-template**'|
+|JWT_SECRET|[String] The secret used to sign the JWT tokens. By default it is '**secret**'|
 
 ## Available Scripts
 | Name | Description |

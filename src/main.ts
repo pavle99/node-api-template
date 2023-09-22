@@ -6,11 +6,11 @@ import { routing } from "@/routes";
 import { createServer } from "express-zod-api";
 
 if (isDevEnviroment && envConfig.GENERATE_CLIENT) {
-  import("@/scripts/clientGenerator");
+  import("@/scripts/client-generator");
 }
 
 if (isDevEnviroment && envConfig.GENERATE_API_DOCS) {
-  import("@/scripts/docsGenerator");
+  import("@/scripts/docs-generator");
 }
 
 // For docs about the express-zod-api integration: https://github.com/RobinTail/express-zod-api/tree/master

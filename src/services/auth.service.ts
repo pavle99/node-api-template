@@ -13,7 +13,7 @@ export const registerUser = async ({ username, email, password, roles }: IRegist
   const user = await User.create({
     username,
     email,
-    password: bcrypt.hashSync(password, 8),
+    password: await bcrypt.hash(password, 8),
   });
 
   if (roles) {
@@ -22,6 +22,9 @@ export const registerUser = async ({ username, email, password, roles }: IRegist
     await user.save();
   } else {
     const role = await Role.findOne({ name: "user" });
+
+    if (!role) throw new Error("Role user not found");
+
     user.roles = [role._id];
     await user.save();
   }

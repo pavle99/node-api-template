@@ -1,9 +1,10 @@
+import { envConfig } from "@/configs/env.config";
 import { Role } from "@/models/role.model";
 import { User } from "@/models/user.model";
+import { safe } from "@/utils/catcher";
 import { createHttpError, createMiddleware, withMeta } from "express-zod-api";
-import { z } from "zod";
 import jwt from "jsonwebtoken";
-import { envConfig } from "@/configs/env.config";
+import { z } from "zod";
 
 export const checkDuplicateUsernameOrEmailMiddleware = createMiddleware({
   input: withMeta(
@@ -73,26 +74,32 @@ export const verifyTokenMiddleware = createMiddleware({
       throw createHttpError(401, "No token provided!");
     }
 
-    jwt.verify(token, envConfig.JWT_SECRET, (err, decoded) => {
-      if (err) {
-        throw createHttpError(401, "Invalid token!");
-      }
+    const jwtVerifyingResult = safe(() => jwt.verify(token, envConfig.JWT_SECRET));
 
-      if (!(typeof decoded === "string")) {
-        request.userId = decoded.id;
-      }
-    });
+    if (!jwtVerifyingResult.ok) {
+      throw createHttpError(401, "Invalid token!");
+    }
 
-    return { token };
+    const decoded = jwtVerifyingResult.data;
+    if (typeof decoded === "string") {
+      throw createHttpError(500, "Decoding token failed!");
+    }
+
+    const userId = decoded.id as string;
+
+    return { userId };
   },
 });
 
 export const isModeratorMiddleware = createMiddleware({
-  input: withMeta(z.object({})).example({}),
-  middleware: async ({ request, logger }) => {
+  input: z.object({ userId: z.string() }),
+  middleware: async ({ logger, input: { userId } }) => {
     logger.debug("Checking whether user is moderator...");
 
-    const user = await User.findById({ _id: request.userId });
+    const user = await User.findById({ _id: userId });
+
+    if (!user) throw createHttpError(404, "User not found!");
+
     const roles = await Role.find({ _id: { $in: user.roles } });
 
     if (roles.some((role) => role.name === "moderator")) return {};
@@ -102,14 +109,17 @@ export const isModeratorMiddleware = createMiddleware({
 });
 
 export const isAdminMiddleware = createMiddleware({
-  input: withMeta(z.object({})).example({}),
-  middleware: async ({ request, logger }) => {
+  input: z.object({ userId: z.string() }),
+  middleware: async ({ logger, input: { userId } }) => {
     logger.debug("Checking whether user is admin...");
 
-    const user = await User.findById({ _id: request.userId });
-    const role = await Role.findOne({ _id: { $in: user.roles } });
+    const user = await User.findById({ _id: userId });
 
-    if (role.name === "admin") return {};
+    if (!user) throw createHttpError(404, "User not found!");
+
+    const roles = await Role.find({ _id: { $in: user.roles } });
+
+    if (roles.some((role) => role.name === "admin")) return {};
 
     throw createHttpError(403, "Require Admin Role!");
   },

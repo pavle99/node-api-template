@@ -1,8 +1,10 @@
+import { envConfig } from "@/configs/env.config";
 import { taggedEndpointsFactory } from "@/factories/tagged-endpoints.factory";
 import {
   checkDuplicateUsernameOrEmailMiddleware,
   checkRolesExistedMiddleware,
 } from "@/middlewares/auth.middleware";
+import { TRole } from "@/models/role.model";
 import { User } from "@/models/user.model";
 import {
   loginInputSchema,
@@ -31,7 +33,7 @@ export const registerEndpoint = taggedEndpointsFactory
         async () => await registerUser({ username, email, password, roles }),
       );
 
-      if (registrationResult.ok === false) {
+      if (!registrationResult.ok) {
         return { message: registrationResult.data };
       }
 
@@ -47,15 +49,15 @@ export const loginEndpoint = taggedEndpointsFactory.build({
   handler: async ({ input: { username, password }, logger }) => {
     logger.debug(`Logging in user ${username}...`);
 
-    const user = await User.findOne({ username }).populate("roles", "-__v");
+    const user = await User.findOne({ username }).populate<{ roles: TRole[] }>("roles", "-__v");
 
     if (!user) throw createHttpError(404, "User not found");
 
-    const passwordIsValid = bcrypt.compareSync(password, user.password);
+    const passwordIsValid = await bcrypt.compare(password, user.password);
 
     if (!passwordIsValid) throw createHttpError(401, "Invalid password");
 
-    const accessToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+    const accessToken = jwt.sign({ id: user.id }, envConfig.JWT_SECRET, {
       algorithm: "HS256",
       expiresIn: 60 * 60 * 24, // 24 hours
       allowInsecureKeySizes: true,
@@ -64,7 +66,7 @@ export const loginEndpoint = taggedEndpointsFactory.build({
     const roles = user.roles.map((role) => role.name);
 
     return {
-      id: user._id.toString(),
+      id: user.id,
       username: user.username,
       email: user.email,
       roles,

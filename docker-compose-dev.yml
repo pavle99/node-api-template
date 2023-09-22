@@ -17,3 +17,14 @@ services:
     env_file:
       - .env
     restart: unless-stopped
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb-data:/data/db
+
+volumes:
+  mongodb-data:
